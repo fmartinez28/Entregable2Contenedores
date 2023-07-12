@@ -11,13 +11,13 @@ services:
       - "backend_db"
     container_name: backend-services
     ports:
-      - "8020:80"
+      - 8020:80
     build:
       context: .
       dockerfile: Dockerfile
     environment:
       - ConnectionStrings__DefaultConnection=Server=backend_db;Port=5432;Database=backenddb;User Id=postgres;Password=postgres;
-      - ASPNETCORE_URLS=http://+:80
+    command: bash -c "dotnet ef database update && dotnet run --urls=http://+:80/"
     networks:
       - dev
   backend_db:
@@ -31,8 +31,6 @@ services:
       - 5454:5432
     restart: always
     volumes:
-      - app_data:/var/lib/postgresql/data
+      - C:/SavedDBData:/var/lib/postgresql/data
     networks:
       - dev
-volumes:
-  app_data:
